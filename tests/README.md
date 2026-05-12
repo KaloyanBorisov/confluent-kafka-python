@@ -14,19 +14,20 @@ Test summary:
 
 **Note:** Unless otherwise stated, all command, file and directory references are relative to the *repo's root* directory.
 
-A python env suitable for running tests:
+Run tests inside the Docker container to avoid local dependency setup:
 
 ```bash
-python3 -m venv venv_test
-source venv_test/bin/activate
-python3 -m pip install -r requirements/requirements-tests-install.txt
-python3 -m pip install .
+docker compose run --rm examples bash
+# inside the container:
+pip install -r requirements/requirements-tests-install.txt
+pytest -s -v tests/test_*.py
 ```
 
-When you're finished with it:
+For integration tests against the running cluster, set the env vars (already available in the container):
 
 ```bash
-deactivate
+export BROKERS=$BOOTSTRAP_SERVERS
+export SR_URL=$SCHEMA_REGISTRY_URL
 ```
 
 ## Unit tests

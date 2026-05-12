@@ -266,47 +266,25 @@ for topic, f in fs.items():
 The `Producer`, `Consumer`, and `AdminClient` are all thread safe.
 ## Install
 
+Run examples and development work inside the provided Docker container — no local install needed:
+
 ```bash
-# Basic installation
+docker compose run --rm examples
+```
+
+The container installs `confluent-kafka` from the current source tree automatically. See [`docker-compose.yml`](docker-compose.yml) and [`examples/README.md`](examples/README.md) for details.
+
+For production deployment or CI, install via pip:
+
+```bash
 pip install confluent-kafka
-
-# With Schema Registry support
-pip install "confluent-kafka[avro,schemaregistry]"     # Avro
-pip install "confluent-kafka[json,schemaregistry]"     # JSON Schema
-pip install "confluent-kafka[protobuf,schemaregistry]" # Protobuf
-
-# With Data Contract rules (includes CSFLE support)
-pip install "confluent-kafka[avro,schemaregistry,rules]"
+pip install "confluent-kafka[avro,schemaregistry]"        # Avro
+pip install "confluent-kafka[json,schemaregistry]"         # JSON Schema
+pip install "confluent-kafka[protobuf,schemaregistry]"     # Protobuf
+pip install "confluent-kafka[avro,schemaregistry,rules]"   # + CSFLE rules
 ```
 
-**Note:** Pre-built Linux wheels do not include SASL Kerberos/GSSAPI support. For Kerberos, see the source installation instructions in [INSTALL.md](INSTALL.md).
-To use Schema Registry with the Avro serializer/deserializer:
-
-```bash
-pip install "confluent-kafka[avro,schemaregistry]"
-```
-
-To use Schema Registry with the JSON serializer/deserializer:
-
-```bash
-pip install "confluent-kafka[json,schemaregistry]"
-```
-
-To use Schema Registry with the Protobuf serializer/deserializer:
-
-```bash
-pip install "confluent-kafka[protobuf,schemaregistry]"
-```
-
-When using Data Contract rules (including CSFLE) add the `rules`extra, e.g.:
-
-```bash
-pip install "confluent-kafka[avro,schemaregistry,rules]"
-```
-
-**Install from source**
-
-For source install, see the *Install from source* section in [INSTALL.md](INSTALL.md).
+**Note:** Pre-built Linux wheels do not include SASL Kerberos/GSSAPI support. For Kerberos or source builds, see [INSTALL.md](INSTALL.md).
 
 ## Broker compatibility
 

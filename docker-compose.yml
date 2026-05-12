@@ -1,0 +1,23 @@
+services:
+
+  examples:
+    image: python:3.12-slim
+    container_name: kafka-python-examples
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      BOOTSTRAP_SERVERS: broker:29092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    networks:
+      - kafka
+    stdin_open: true
+    tty: true
+    entrypoint: /bin/bash
+    command: >
+      -c "pip install --quiet .[examples] && bash"
+
+networks:
+  kafka:
+    external: true
+    name: cp-all-in-one-kraft_default

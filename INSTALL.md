@@ -1,11 +1,16 @@
 # confluent-kafka-python installation instructions
 
-## Install pre-built wheels (recommended)
+## Running examples and development
 
-Confluent provides pre-built Python wheels of confluent-kafka-python with
-all dependencies included.
+Use the Docker container at the project root — no local install needed:
 
-To install, simply do:
+```bash
+docker compose run --rm examples
+```
+
+See [`docker-compose.yml`](docker-compose.yml) for details.
+
+## Install pre-built wheels (production / CI)
 
 ```bash
 python3 -m pip install confluent-kafka

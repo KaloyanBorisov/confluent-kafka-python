@@ -266,31 +266,22 @@ from confluent_kafka.schema_registry._async.protobuf import AsyncProtobufSeriali
 
 ## Running the Examples
 
-Most examples require a running Kafka cluster. You can use:
-
-- Local Kafka installation
-- Docker Compose (see `docker/` subdirectory)
-- [Confluent Cloud](https://confluent.cloud/) - see [Getting Started with Python](https://developer.confluent.io/get-started/python/) guide.
-
-### Basic Usage Pattern
+All examples run inside a Docker container joined to the Confluent Platform cluster network.
+No local compiler, librdkafka, or virtual environment required.
 
 ```bash
-# Most examples follow this pattern:
-python3 <example_name>.py <bootstrap_servers> [additional_args]
-
-# For example:
-python3 producer.py localhost:9092
-python3 consumer.py localhost:9092
-python3 asyncio_example.py localhost:9092 my-topic
+# From the project root
+docker compose run --rm examples
 ```
 
-### Examples with Schema Registry
-
-For Avro, JSON, and Protobuf examples, you'll also need a Schema Registry:
+Inside the container the cluster hostnames and env vars are pre-configured:
 
 ```bash
-python3 avro_producer.py localhost:9092 http://localhost:8081
+python examples/producer.py $BOOTSTRAP_SERVERS
+python examples/avro_producer.py $BOOTSTRAP_SERVERS $SCHEMA_REGISTRY_URL
 ```
+
+The project directory is mounted at `/app` so edits on the host are reflected immediately.
 
 ### Schema Registry Resources
 
@@ -299,34 +290,3 @@ python3 avro_producer.py localhost:9092 http://localhost:8081
 - [Confluent Cloud Schema Registry](https://docs.confluent.io/cloud/current/sr/index.html)
 
 Check each example's source code for specific command-line arguments and configuration requirements.
-
-## venv setup
-
-It's usually a good idea to install Python dependencies in a virtual environment to avoid
-conflicts between projects.
-
-To setup a venv with the latest release version of confluent-kafka and dependencies of all examples installed:
-
-```bash
-python3 -m venv venv_examples
-source venv_examples/bin/activate
-python3 -m pip install confluent_kafka
-python3 -m pip  install -r requirements/requirements-examples.txt
-```
-
-To setup a venv that uses the current source tree version of confluent_kafka, you
-need to have a C compiler and librdkafka installed
-([from a package](https://github.com/edenhill/librdkafka#installing-prebuilt-packages), or
-[from source](https://github.com/edenhill/librdkafka#build-from-source)). Then:
-
-```bash
-python3 -m venv venv_examples
-source venv_examples/bin/activate
-python3 -m pip install .[examples]
-```
-
-When you're finished with the venv:
-
-```bash
-deactivate
-```
