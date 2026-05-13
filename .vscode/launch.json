@@ -1,0 +1,133 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "producer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/producer.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}", "test-topic"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "consumer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/consumer.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}", "test-group", "test-topic"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "context_manager_example",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/context_manager_example.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "asyncio_example",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/asyncio_example.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}", "test-topic"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "eos_transactions",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/eos_transactions.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "adminapi",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/adminapi.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}", "list-topics"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "adminapi_logger",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/adminapi_logger.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "get_watermark_offsets",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/get_watermark_offsets.py",
+            "args": ["${env:BOOTSTRAP_SERVERS}", "test-group", "test-topic"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "avro_producer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/avro_producer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "avro_consumer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/avro_consumer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "asyncio_avro_producer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/asyncio_avro_producer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "asyncio_avro_consumer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/asyncio_avro_consumer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "json_producer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/json_producer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "json_consumer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/json_consumer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "protobuf_producer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/protobuf_producer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "protobuf_consumer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/protobuf_consumer.py",
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
+            "console": "integratedTerminal"
+        }
+    ]
+}

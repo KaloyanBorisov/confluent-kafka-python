@@ -15,7 +15,7 @@ services:
     tty: true
     entrypoint: /bin/bash
     command: >
-      -c "pip install --quiet .[examples] && bash"
+      -c "pip install --quiet confluent-kafka[avro,json,protobuf,schemaregistry] && pip install --quiet -r requirements/requirements-examples.txt && bash"
 
 networks:
   kafka:
