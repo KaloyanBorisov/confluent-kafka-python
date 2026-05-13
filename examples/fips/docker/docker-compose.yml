@@ -1,24 +1,31 @@
 version: "3.9"
+name: federal-information-processing-standards
+
 services:
 
-  zookeeper:
-    hostname: zookeeper
-    container_name: zookeeper
-    restart: always
-    image: confluentinc/cp-zookeeper:7.4.0
+  controller:
+    image: confluentinc/cp-kafka:7.9.6
+    hostname: fips-controller
+    container_name: fips-controller
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/zookeeper_jaas.conf
-                  -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
-                  -DrequireClientAuthScheme=sasl
-                  -Dzookeeper.allowSaslFailedClients=false
-    volumes:
-      - ./secrets:/etc/kafka/secrets
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: 'controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '2@fips-controller:9093'
+      KAFKA_LISTENERS: 'CONTROLLER://fips-controller:9093'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LOG_DIRS: '/var/lib/kafka/data'
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   broker:
-    image: confluentinc/cp-kafka:7.4.0
-    hostname: broker
-    container_name: broker
+    image: confluentinc/cp-kafka:7.9.6
+    hostname: fips-broker
+    container_name: fips-broker
+    depends_on:
+      - controller
     restart: always
     ports:
       - 29092:29092
@@ -26,16 +33,18 @@ services:
     volumes:
       - ./secrets:/etc/kafka/secrets
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '2@fips-controller:9093'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
       KAFKA_INTER_BROKER_LISTENER_NAME: SASL_SSL
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: SASL_SSL:SASL_SSL,SASL_SSL_HOST:SASL_SSL
-      KAFKA_ADVERTISED_LISTENERS: SASL_SSL://localhost:9092,SASL_SSL_HOST://broker:29092
-      KAFKA_LISTENERS: SASL_SSL://:9092,SASL_SSL_HOST://:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,SASL_SSL:SASL_SSL,SASL_SSL_HOST:SASL_SSL'
+      KAFKA_ADVERTISED_LISTENERS: 'SASL_SSL://localhost:9092,SASL_SSL_HOST://fips-broker:29092'
+      KAFKA_LISTENERS: 'SASL_SSL://:9092,SASL_SSL_HOST://:29092'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      CONFLUENT_METRICS_REPORTER_SECURITY_PROTOCOL: SASL_SSL
-      CONFLUENT_METRICS_REPORTER_SASL_JAAS_CONFIG: "org.apache.kafka.common.security.plain.PlainLoginModule required \
-        username=\"client\" \
-        password=\"client-secret\";"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
       KAFKA_SSL_KEYSTORE_FILENAME: server.keystore.jks
@@ -43,9 +52,9 @@ services:
       KAFKA_SSL_KEY_CREDENTIALS: creds
       KAFKA_SSL_TRUSTSTORE_FILENAME: server.truststore.jks
       KAFKA_SSL_TRUSTSTORE_CREDENTIALS: creds
-      # KAFKA_SSL_CIPHER.SUITES: TLS_CHACHA20_POLY1305_SHA256 # FIPS non compliant algo.
-      # enables 2-way authentication
-      KAFKA_SSL_CLIENT_AUTH: "required"
-      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ""
-      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/broker_jaas.conf
-      KAFKA_SSL_PRINCIPAL_MAPPING_RULES: RULE:^CN=(.*?),OU=TEST.*$$/$$1/,DEFAULT
+      # KAFKA_SSL_CIPHER_SUITES: TLS_CHACHA20_POLY1305_SHA256 # non-FIPS algo — uncomment to verify FIPS enforcement rejects it
+      KAFKA_SSL_CLIENT_AUTH: 'required'
+      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ''
+      KAFKA_OPTS: '-Djava.security.auth.login.config=/etc/kafka/secrets/broker_jaas.conf'
+      KAFKA_SSL_PRINCIPAL_MAPPING_RULES: 'RULE:^CN=(.*?),OU=TEST.*$$$$1/,DEFAULT'
+      KAFKA_LOG_DIRS: '/var/lib/kafka/data'

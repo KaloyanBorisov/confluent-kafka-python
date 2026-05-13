@@ -1,0 +1,40 @@
+FROM python:3.12-slim
+
+# Build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    perl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Build and install OpenSSL FIPS provider (FIPS 140-3, v3.1.2)
+RUN git clone --depth 1 --branch openssl-3.1.2 https://github.com/openssl/openssl.git /tmp/openssl \
+    && cd /tmp/openssl \
+    && ./Configure enable-fips \
+    && make install_fips \
+    && rm -rf /tmp/openssl
+
+# Configure OpenSSL to use the FIPS provider by default
+RUN echo "config_diagnostics = 1\n\
+openssl_conf = openssl_init\n\
+\n\
+.include /usr/local/ssl/fipsmodule.cnf\n\
+\n\
+[openssl_init]\n\
+providers = provider_sect\n\
+alg_section = algorithm_sect\n\
+\n\
+[provider_sect]\n\
+fips = fips_sect\n\
+base = base_sect\n\
+\n\
+[base_sect]\n\
+activate = 1\n\
+\n\
+[algorithm_sect]\n\
+default_properties = fips=yes" > /usr/local/ssl/openssl-fips.cnf
+
+ENV OPENSSL_CONF=/usr/local/ssl/openssl-fips.cnf
+ENV OPENSSL_MODULES=/usr/local/lib64/ossl-modules
+
+WORKDIR /app

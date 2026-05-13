@@ -51,6 +51,7 @@ if __name__ == '__main__':
         'ssl.key.password': '111111',
         'ssl.certificate.location': './docker/secrets/localhost_client.crt',
         'ssl.ca.location': './docker/secrets/ca-root.crt',
+        'ssl.endpoint.identification.algorithm': 'none',
         'ssl.providers': 'fips,base',
     }
 

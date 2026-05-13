@@ -128,6 +128,32 @@
             "program": "${workspaceFolder}/examples/protobuf_consumer.py",
             "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-s", "${env:SCHEMA_REGISTRY_URL}"],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "fips_producer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/fips/fips_producer.py",
+            "args": ["fips-broker:29092", "fips-test-topic"],
+            "cwd": "${workspaceFolder}/examples/fips",
+            "env": {
+                "OPENSSL_CONF": "${env:OPENSSL_CONF}",
+                "OPENSSL_MODULES": "${env:OPENSSL_MODULES}"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "fips_consumer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/fips/fips_consumer.py",
+            "args": ["fips-broker:29092", "fips-group", "fips-test-topic"],
+            "cwd": "${workspaceFolder}/examples/fips",
+            "env": {
+                "OPENSSL_CONF": "${env:OPENSSL_CONF}",
+                "OPENSSL_MODULES": "${env:OPENSSL_MODULES}"
+            },
+            "console": "integratedTerminal"
         }
     ]
 }

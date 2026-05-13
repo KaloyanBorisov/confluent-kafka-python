@@ -1,0 +1,27 @@
+name: dev-cluster
+
+services:
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: kafka-python-dev
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      bash -c "OPENSSL_CONF= pip install --quiet confluent-kafka[avro,json,protobuf,schemaregistry] &&
+               OPENSSL_CONF= pip install --quiet -r requirements/requirements-examples.txt &&
+               tail -f /dev/null"
+    networks:
+      - main-cluster
+      - fips-cluster
+
+networks:
+  main-cluster:
+    external: true
+    name: cp-all-in-one-kraft_default
+  fips-cluster:
+    external: true
+    name: federal-information-processing-standards
