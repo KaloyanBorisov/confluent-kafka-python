@@ -38,7 +38,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/examples/eos_transactions.py",
-            "args": ["-b", "${env:BOOTSTRAP_SERVERS}"],
+            "args": ["-b", "${env:BOOTSTRAP_SERVERS}", "-t", "eos-input", "-o", "eos-output", "-p", "0"],
             "console": "integratedTerminal"
         },
         {
@@ -62,7 +62,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/examples/get_watermark_offsets.py",
-            "args": ["${env:BOOTSTRAP_SERVERS}", "test-group", "test-topic"],
+            "args": ["${env:BOOTSTRAP_SERVERS}", "test-group", "test-topic", "eos-input", "eos-output"],
             "console": "integratedTerminal"
         },
         {
