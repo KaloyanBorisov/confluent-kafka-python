@@ -26,6 +26,7 @@ tests/docker/conf/tls/*
 .python-version
 .DS_Store
 .idea
+.run
 tmp-KafkaCluster
 .venv
 venv_test
