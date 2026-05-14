@@ -36,3 +36,4 @@ venv_examples
 **/test-report.xml
 .ducktape
 results
+.env

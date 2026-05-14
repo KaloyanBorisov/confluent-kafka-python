@@ -130,6 +130,48 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "json_producer_encryption_cloud",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/json_producer_encryption.py",
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "args": [
+                "-b", "${env:CC_BOOTSTRAP_SERVERS}",
+                "-s", "${env:CC_SCHEMA_REGISTRY_URL}",
+                "-t", "${env:CC_KAFKA_TOPIC}",
+                "-kn", "${env:KEK_NAME}",
+                "-kt", "${env:KMS_TYPE}",
+                "-ki", "${env:KMS_KEY_ID}",
+                "-ka", "${env:CC_KAFKA_API_KEY}",
+                "-ks", "${env:CC_KAFKA_API_SECRET}",
+                "-sa", "${env:CC_SR_API_KEY}",
+                "-ss", "${env:CC_SR_API_SECRET}"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "json_producer_encryption",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/json_producer_encryption.py",
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "PYTHONUNBUFFERED": "1"
+            },
+            "args": [
+                "-b", "${env:BOOTSTRAP_SERVERS}",
+                "-s", "${env:SCHEMA_REGISTRY_URL}",
+                "-t", "${env:KAFKA_TOPIC}",
+                "-kn", "${env:KEK_NAME}",
+                "-kt", "${env:KMS_TYPE}",
+                "-ki", "${env:KMS_KEY_ID}"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "fips_producer",
             "type": "debugpy",
             "request": "launch",

@@ -134,6 +134,8 @@ def main(args):
     }
     """
     schema_registry_conf = {'url': args.schema_registry}
+    if args.sr_api_key and args.sr_api_secret:
+        schema_registry_conf['basic.auth.user.info'] = f"{args.sr_api_key}:{args.sr_api_secret}"
     schema_registry_client = SchemaRegistryClient(schema_registry_conf)
 
     rule = Rule(
@@ -164,7 +166,15 @@ def main(args):
 
     string_serializer = StringSerializer('utf_8')
 
-    producer = Producer({'bootstrap.servers': args.bootstrap_servers})
+    producer_conf = {'bootstrap.servers': args.bootstrap_servers}
+    if args.kafka_api_key and args.kafka_api_secret:
+        producer_conf.update({
+            'security.protocol': 'SASL_SSL',
+            'sasl.mechanism': 'PLAIN',
+            'sasl.username': args.kafka_api_key,
+            'sasl.password': args.kafka_api_secret,
+        })
+    producer = Producer(producer_conf)
 
     print("Producing user records to topic {}. ^C to exit.".format(topic))
     while True:
@@ -208,5 +218,9 @@ if __name__ == '__main__':
         '-kt', dest="kms_type", required=True, help="KMS type, one of aws-kms, azure-kms, gcp-kms, hcvault"
     )
     parser.add_argument('-ki', dest="kms_key_id", required=True, help="KMS key id, such as an ARN")
+    parser.add_argument('-ka', dest="kafka_api_key", default=None, help="Kafka API key (Confluent Cloud)")
+    parser.add_argument('-ks', dest="kafka_api_secret", default=None, help="Kafka API secret (Confluent Cloud)")
+    parser.add_argument('-sa', dest="sr_api_key", default=None, help="Schema Registry API key (Confluent Cloud)")
+    parser.add_argument('-ss', dest="sr_api_secret", default=None, help="Schema Registry API secret (Confluent Cloud)")
 
     main(parser.parse_args())

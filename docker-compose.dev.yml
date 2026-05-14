@@ -8,8 +8,11 @@ services:
       dockerfile: Dockerfile.dev
     container_name: kafka-python-dev
     working_dir: /app
+    env_file:
+      - .env
     volumes:
       - .:/app
+      - ~/.aws:/root/.aws:ro
     command: >
       bash -c "OPENSSL_CONF= pip install --quiet confluent-kafka[avro,json,protobuf,schemaregistry] &&
                OPENSSL_CONF= pip install --quiet -r requirements/requirements-examples.txt &&
